@@ -16,7 +16,7 @@ Clone has been created with usage for Proto Curated repositories, you're free to
 ## Usage
 *It is recommended to use Clone with GitHub Actions schedules to keep repositories in sync on a schedule without needing to run it manually.*
 
-Download a build from the release page for your system and run it in your command line. You **must** have `GITHUB_TOKEN`, `SOURCE_REPO` and `TARGET_REPO` In your environment beforehand, with `SOURCE_REPO` and `TARGET_REPO` being formatted like `ProtoSoftware/Example` instead of full URLs.
+Download a build from the release page for your system and run it in your command line. You **must** have `GITHUB_TOKEN`, `SOURCE_REPO` and `TARGET_REPO` In your environment beforehand, with `SOURCE_REPO` and `TARGET_REPO` being formatted like `ProtoSoftware/Example` instead of full URLs. There is also an optional `SKIP_OLD` variable which can be set to "true" to skip releases older than a month.
 
 ### GitHub Actions Example
 ```yml

@@ -2,9 +2,13 @@
 
 <img src="./.assets/icon.png" alt="Proto Logo" width="10%">
   
-Fetching and clone release/tag data from one repository to another
+### Clone
+  
+Clone release/tag data from one repository to another
 
 </div>
+
+---
 
 ### Note
 Clone has been created with usage for Proto Curated repositories, you're free to use this with your own projects but keep in mind that no support will be offered and breaking changes could be introduced at any moment. 

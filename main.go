@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/google/go-github/v44/github"
 	"golang.org/x/oauth2"
@@ -65,11 +66,13 @@ func main() {
 			}
 		}
 		if !found {
-			fmt.Println("Missing release:", targetRelease.GetTagName())
 			missingReleases = append(missingReleases, targetRelease)
 		}
 	}
 
+	var missing []string
+	var skipped []string
+	var created []string
 	for _, missingRelease := range missingReleases {
 
 		// SKip if it's a prerelease
@@ -77,12 +80,22 @@ func main() {
 			continue
 		}
 
+		missing = append(missing, missingRelease.GetTagName())
+
+		// Skip releases over 3 month old (Prevents backlog of releases to process)
+		if os.Getenv("SKIP_OLD") == "true" {
+			if missingRelease.GetPublishedAt().AddDate(0, 1, 0).Before(time.Now()) {
+				skipped = append(skipped, missingRelease.GetTagName())
+				continue
+			}
+		}
+
 		TagName := missingRelease.GetTagName()
 		ReleaseName := missingRelease.GetName()
 		ReleaseBody := fmt.Sprintf(`
 <h3> Notice </h3>
 
-Release automatically created from https://github.com/%s/%s
+Release automatically created from https://github.com/%s/%s using [clone](https://github.com/ProtoSoftware/clone)
 		
 <h1> Original Release Notes </h1>
 
@@ -101,6 +114,12 @@ Release automatically created from https://github.com/%s/%s
 			panic(err)
 		}
 
-		fmt.Printf("Created release: %s\n", release.GetTagName())
+		created = append(created, release.GetTagName())
 	}
+
+	fmt.Println("Missing: " + strings.Join(missing, ", "))
+	fmt.Println("Skipped: " + strings.Join(skipped, ", "))
+	fmt.Println("Created: " + strings.Join(created, ", "))
+
+	fmt.Println("Done! Added " + fmt.Sprintf("%d", len(created)) + " new releases 🎉")
 }

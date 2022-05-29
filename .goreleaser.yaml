@@ -17,6 +17,7 @@ archives:
       386: i386
       amd64: x86_64
     format: binary
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
 checksum:
   name_template: "checksums.txt"
 snapshot:
